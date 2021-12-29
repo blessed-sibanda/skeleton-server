@@ -26,7 +26,7 @@ const formatError = (err) => {
         message = 'Something went wrong';
         break;
     }
-    return { error: message };
+    return { message };
   } else if (err.errors) {
     let errors = {};
 
@@ -39,7 +39,7 @@ const formatError = (err) => {
     }
     return { errors };
   } else {
-    return { error: err.message };
+    return { message: err.message };
   }
 };
 
