@@ -3,6 +3,7 @@ const { Router } = require('express');
 const { formatError } = require('../helpers/error.helper');
 const { requireAuth, isProfileOwner } = require('../services/auth.service');
 const { userById, updateUser } = require('../services/user.service');
+const User = require('../models/user.model');
 
 const router = Router();
 
@@ -32,8 +33,8 @@ router.get('/:userId', requireAuth, async (req, res) => {
 
 router.put('/:userId', requireAuth, isProfileOwner, async (req, res) => {
   try {
-    let updatedUser = await updateUser(req.body);
-    res.json(user);
+    let updatedUser = await updateUser(req);
+    res.json(updatedUser);
   } catch (err) {
     res.status(400).json(formatError(err));
   }

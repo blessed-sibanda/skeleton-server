@@ -3,24 +3,28 @@ const merge = require('lodash/merge');
 const User = require('../models/user.model');
 
 const userById = async (req, res, next, id) => {
-  let user = await User.findById(id);
-  if (!user)
-    return res.status(404).json({
-      error: 'User not found',
-    });
-  req.profile = user;
-  next();
+  try {
+    let user = await User.findById(id);
+    if (!user)
+      return res.status(404).json({
+        error: 'User not found',
+      });
+    req.profile = user;
+    next();
+  } catch (err) {
+    next(err);
+  }
 };
 
-const updateUser = async (userData) => {
-  delete userData._id;
-  delete userData.hashedPassword;
-  delete userData.salt;
+const updateUser = async (req) => {
+  delete req.body._id;
+  delete req.body.hashedPassword;
+  delete req.body.salt;
 
-  if (userData.email && userData.email.trim() === req.profile.email)
-    delete userData.email;
+  if (req.body.email && req.body.email.trim() === req.profile.email)
+    delete req.body.email;
 
-  let user = merge(req.profile, userData);
+  let user = merge(req.profile, req.body);
   return await user.save();
 };
 
