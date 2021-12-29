@@ -1,5 +1,3 @@
-const debug = require('debug')('skeleton-server:dbErrorHandler');
-
 const getUniqueErrorMessage = (err) => {
   let output;
   try {
